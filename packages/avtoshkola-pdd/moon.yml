@@ -1,0 +1,36 @@
+$schema: "https://moonrepo.dev/schemas/project.json"
+
+project:
+  name: "avtoshkola-pdd"
+  description: "avtoshkola pdd db"
+
+type: "library"
+language: "typescript"
+
+fileGroups:
+  configs:
+    - "esbuild.config.js"
+    - "tsconfig.json"
+  sources:
+    - "src/**/*"
+
+tasks:
+  build:
+    deps:
+      - tsc
+      - esbuild
+    outputs:
+      - "dist"
+
+  tsc:
+    command: "tsc"
+    outputs:
+      - "dist"
+
+  esbuild:
+    command: "node esbuild.config.js"
+    inputs:
+      - "@group(configs)"
+      - "@group(sources)"
+    outputs:
+      - "dist"

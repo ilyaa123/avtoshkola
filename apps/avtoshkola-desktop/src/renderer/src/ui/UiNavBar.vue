@@ -1,44 +1,69 @@
 <script setup lang="ts">
-import { useAuth } from '@renderer/store/auth'
+import { onMounted, onUnmounted, ref } from 'vue'
 
-const { user } = useAuth()
+interface Props {
+  title?: string
+  avatar?: string
+  login?: string
+  name?: string
+}
+
+const emits = defineEmits(['toggle-sidebar'])
+
+defineProps<Props>()
+
+const menuOpen = ref(false)
+const menuRef = ref<HTMLElement | null>(null)
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
+    menuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
+
 <template>
-  <nav class="bg-white border-gray-200 dark:bg-gray-900">
-    <div class="flex flex-wrap items-center justify-end mx-auto p-4">
-      <div class="flex items-center md:space-x-0 space-x-3">
+  <nav class="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white m-2 rounded-md">
+    <div class="flex flex-wrap items-center justify-between mx-auto p-4">
+      <div>
+        <router-link v-if="title" to="/" class="block md:hidden">
+          <h2 class="text-2xl">{{ title }}</h2>
+        </router-link>
+      </div>
+      <div ref="menuRef" class="flex items-center md:space-x-0 space-x-3 relative">
         <button
+          id="user-menu-button"
           type="button"
           class="hidden md:flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-          id="user-menu-button"
-          aria-expanded="false"
           data-dropdown-toggle="user-dropdown"
           data-dropdown-placement="bottom"
+          @click.stop="menuOpen = !menuOpen"
         >
-          <span class="sr-only">Open user menu</span>
-          <img
-            v-if="!!user?.avatar"
-            :src="user.avatar"
-            class="w-8 h-8 rounded-full"
-            alt="user avatar"
-          />
+          <img v-if="!!avatar" :src="avatar" class="w-8 h-8 rounded-full" alt="user avatar" />
         </button>
         <div
-          class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
           id="user-dropdown"
+          class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute top-full right-0 w-max min-w-40"
+          :class="{ hidden: !menuOpen }"
         >
           <div class="px-4 py-3">
-            <span class="block text-sm text-gray-900 dark:text-white">{{ user?.name }}</span>
-            <span class="block text-sm text-gray-500 truncate dark:text-gray-400"
-              >name@flowbite.com</span
-            >
+            <span class="block text-sm text-gray-900 dark:text-white">{{ login }}</span>
+            <span class="block text-sm text-gray-500 truncate dark:text-gray-400">{{ name }}</span>
           </div>
           <ul class="py-2" aria-labelledby="user-menu-button">
             <li>
               <a
                 href="#"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >Sign out</a
+                >Выход</a
               >
             </li>
           </ul>
@@ -50,6 +75,7 @@ const { user } = useAuth()
           data-drawer-target="default-sidebar"
           data-drawer-toggle="default-sidebar"
           aria-controls="default-sidebar"
+          @click="emits('toggle-sidebar')"
         >
           <span class="sr-only">Open main menu</span>
           <svg

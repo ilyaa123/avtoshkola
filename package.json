@@ -5,5 +5,12 @@
   "workspaces": [
     "packages/*",
     "apps/*"
-  ]
+  ],
+  "devDependencies": {
+    "@moonrepo/cli": "^1.32.1"
+  },
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": "20.10.0"
+  }
 }

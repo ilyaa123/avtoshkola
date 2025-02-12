@@ -2,28 +2,25 @@ import { contextBridge } from 'electron'
 
 import { electronAPI } from '@electron-toolkit/preload'
 
-// Импорт пользовательского модуля auth
-import auth from './auth'
+import auth from './api/auth'
+import questions from './api/questions'
 
-// Создание объекта `api`, который будет передаваться в рендер-процесс
 const api = {
-  auth
+  auth,
+  questions
 }
 
-// Проверка, включена ли контекстная изоляция в приложении
 if (process.contextIsolated) {
   try {
-    // Использование contextBridge для безопасного экспонирования API в глобальном объекте window
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
   }
 } else {
-  // Если контекстная изоляция отключена, напрямую добавляем свойства в объект window
-
-  // @ts-ignore — отключение проверки типов, так как свойства добавляются динамически
+  // @ts-ignore Property 'electron' does not exist on type 'Window & typeof globalThis'
   window.electron = electronAPI
-  // @ts-ignore
+
+  // @ts-ignore Property 'api' does not exist on type 'Window & typeof globalThis'
   window.api = api
 }

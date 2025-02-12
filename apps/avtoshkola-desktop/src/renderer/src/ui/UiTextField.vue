@@ -16,6 +16,10 @@ const value = defineModel<string>({
   default: ''
 })
 
+const error = defineModel<string>('error', {
+  default: ''
+})
+
 const id = useId()
 </script>
 <template>
@@ -27,12 +31,14 @@ const id = useId()
       >{{ label }}</label
     >
     <input
-      v-model="value"
       :id="id"
+      v-model="value"
       :placeholder="placeholder"
       :type="type"
       :required="required"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
+      @input="error = ''"
     />
+    <p v-if="error" class="text-red-600 text-sm">{{ error }}</p>
   </div>
 </template>

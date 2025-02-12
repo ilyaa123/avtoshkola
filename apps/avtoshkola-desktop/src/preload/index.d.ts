@@ -1,7 +1,8 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
 
 // Импорт модулей
-import auth from './auth'
+import auth from './api/auth'
+import questions from './api/questions'
 
 // Расширение глобального пространства имен TypeScript
 declare global {
@@ -14,6 +15,7 @@ declare global {
     // Добавление свойства api, содержащего объект с модулем auth
     api: {
       auth: typeof auth
+      questions: typeof questions
     }
   }
 }

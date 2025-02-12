@@ -1,0 +1,36 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+project:
+  name: 'avtoshkola-desktop'
+  description: 'avtoshkola desktop app'
+
+type: 'application'
+language: 'typescript'
+
+dependsOn:
+  - 'avtoshkola-pdd'
+
+tasks:
+  build-win:
+    command: 'yarn build && electron-builder --win'
+    deps:
+      - '^:build'
+    inputs:
+      - 'src/**/*'
+      - 'resources/**'
+      - 'electron-builder.yml'
+      - 'electron.vite.config.ts'
+      - 'postcss.config.js'
+      - 'tailwind.config.ts'
+      - 'tsconfig.json'
+      - 'tsconfig.node.json'
+      - 'tsconfig.web.json'
+    outputs:
+      - '.out'
+      - 'dist'
+      - 'build'
+  dev:
+    command: 'electron-vite dev'
+    preset: 'server'
+    deps:
+      - '^:build'

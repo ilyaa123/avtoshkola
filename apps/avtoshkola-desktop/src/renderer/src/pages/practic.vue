@@ -1,1 +1,1 @@
-<template>practic</template>
+<template><div>practic</div></template>

@@ -7,73 +7,81 @@ import type { NavigationGuardNext } from 'vue-router'
 import type { Middleware, MiddlewareContext } from '@renderer/route-meta'
 
 const router = createRouter({
-  history: createMemoryHistory(), // Используется память для хранения истории (подходит для Electron и тестов)
+  history: createMemoryHistory(),
   routes: [
     {
-      path: '/', // Корневой маршрут
-      component: () => import('@renderer/layouts/HomeLayout.vue'), // Главный layout
-      meta: { isAuth: true, middleware: [authMiddleware] }, // Метаданные маршрута, включая middleware
+      path: '/',
+      component: () => import('@renderer/layouts/HomeLayout.vue'),
+      meta: { isAuth: true, middleware: [authMiddleware] },
       children: [
         {
-          path: '', // Главная страница
+          path: '',
           component: () => import('@renderer/pages/index.vue')
         },
         {
-          path: 'teory', // Подстраница "теория"
-          component: () => import('@renderer/pages/teory.vue')
+          path: 'teory',
+          children: [
+            {
+              path: '',
+              component: () => import('@renderer/pages/teory/index.vue')
+            },
+            {
+              path: 'penalties',
+              component: () => import('@renderer/pages/teory/penalties.vue')
+            },
+            {
+              path: 'questions',
+              component: () => import('@renderer/pages/teory/questions.vue')
+            },
+            {
+              path: 'signs',
+              component: () => import('@renderer/pages/teory/signs.vue')
+            }
+          ]
         },
         {
-          path: 'practic', // Подстраница "практика"
+          path: 'practic',
           component: () => import('@renderer/pages/practic.vue')
         }
       ]
     },
     {
-      path: '/login', // Маршрут для страницы входа
+      path: '/login',
       component: () => import('@renderer/pages/login.vue')
     }
   ]
 })
 
-// Фабрика функций для обработки middleware
 const nextFactory = (
   context: MiddlewareContext,
   middleware: Middleware[],
   index: number
 ): NavigationGuardNext => {
-  const subsequentMiddleware = middleware[index] // Выбираем следующее middleware
+  const subsequentMiddleware = middleware[index]
 
-  if (!subsequentMiddleware) return context.next // Если middleware закончились, переходим дальше
+  if (!subsequentMiddleware) return context.next
 
   return (...parameters) => {
     if (parameters.length > 0) {
-      // Если переданы параметры (например, перенаправление), вызываем next с ними
       return context.next(...(parameters as []))
     }
 
-    // Рекурсивно создаем следующий middleware
     const nextMiddleware = nextFactory(context, middleware, index + 1)
-    subsequentMiddleware({ ...context, next: nextMiddleware }) // Выполняем текущее middleware
+    subsequentMiddleware({ ...context, next: nextMiddleware })
   }
 }
 
-// Устанавливаем глобальный middleware для маршрутов
 router.beforeEach((to, from, next) => {
   if (to.meta.middleware) {
-    // Проверяем, есть ли middleware в метаданных маршрута
     const middleware = Array.isArray(to.meta.middleware) ? to.meta.middleware : [to.meta.middleware]
 
-    // Создаем контекст маршрута
     const context: MiddlewareContext = { from, next, router, to }
 
-    // Создаем цепочку middleware с помощью nextFactory
     const nextMiddleware = nextFactory(context, middleware, 1)
 
-    // Выполняем первое middleware
     return middleware[0]({ ...context, next: nextMiddleware })
   }
 
-  // Если middleware нет, переходим дальше
   return next()
 })
 
