@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch } from 'vue'
 
 import UiNavBar from '@renderer/ui/UiNavBar.vue'
 import UiSidebar from '@renderer/ui/UiSidebar.vue'
+import UiBreadcrumbs from '@renderer/ui/UiBreadcrumbs.vue'
 
+import { useRoute } from 'vue-router'
 import { useAuth } from '@renderer/store/auth'
 
 const menu = [
@@ -23,6 +24,21 @@ const route = useRoute()
 const { user } = useAuth()
 
 const sidebarIsOpen = ref(false)
+
+const breadcrumbs = computed(() => {
+  const breadcrumbList: { title: string; to: string }[] = []
+
+  route.matched.forEach((record) => {
+    if (record.meta.title) {
+      breadcrumbList.push({
+        title: record.meta.title as string,
+        to: record.path
+      })
+    }
+  })
+
+  return breadcrumbList
+})
 
 watch(
   () => route.fullPath,
@@ -50,6 +66,9 @@ watch(
         @toggle-sidebar="sidebarIsOpen = !sidebarIsOpen"
       />
       <div class="m-2 pt-2">
+        <transition name="fade-slide" mode="out-in">
+          <ui-breadcrumbs v-if="breadcrumbs.length > 1" :breadcrumbs="breadcrumbs" class="mb-4" />
+        </transition>
         <router-view v-slot="{ Component }">
           <transition name="fade-slide" mode="out-in">
             <component :is="Component" />

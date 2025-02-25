@@ -1,11 +1,10 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
 
-// Функция для создания окна приложения
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 900,
@@ -19,32 +18,30 @@ function createWindow(): void {
     }
   })
 
-  // Событие: когда окно готово к показу
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show() // Отображение окна
+    mainWindow.show()
 
     if (is.dev) {
-      mainWindow.webContents.openDevTools() // Открытие инструментов разработчика в режиме разработки
+      mainWindow.webContents.openDevTools()
     }
   })
 
-  // Обработка открытия новых окон из WebContents
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
-    return { action: 'deny' } // Запрещает открытие новых окон в приложении
+    return { action: 'deny' }
   })
 
-  // Загрузка содержимого окна
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    // В режиме разработки загружается URL с локального сервера разработки
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    // В продакшн-сборке загружается файл HTML из папки сборки
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
 
-// Основной процесс: запуск приложения
+ipcMain.handle('get-app-path', () => {
+  return app.getAppPath()
+})
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
 
@@ -52,17 +49,14 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow() // Создает основное окно приложения
+  createWindow()
 
-  // Событие активации приложения (например, при нажатии на иконку в Dock на macOS)
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 
-// Событие: все окна приложения закрыты
 app.on('window-all-closed', () => {
-  // Для macOS приложение не завершает работу при закрытии всех окон
   if (process.platform !== 'darwin') {
     app.quit()
   }

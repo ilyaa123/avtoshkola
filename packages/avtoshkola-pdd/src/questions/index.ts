@@ -1,9 +1,9 @@
-import { Ticket, TicketCategory, Tikets, Topics } from "./types";
+import { Ticket, TicketCategory, Tikets, Topic, Topics } from "./types";
 
 import { ticketsDb, topicsDb } from "./utils";
 
-const getTicketById = (id: number, category: TicketCategory): Ticket | null => {
-  return ticketsDb[category]("get", String(id));
+const getTicketById = (id: string, category: TicketCategory): Ticket | null => {
+  return ticketsDb[category]("get", id);
 };
 
 const getRandomTicket = (category: TicketCategory): Ticket | null => {
@@ -23,6 +23,10 @@ const getAllTickets = (category: TicketCategory): Tikets => {
   }));
 };
 
+const getTopicById = (id: string, category: TicketCategory): Topic | null => {
+  return topicsDb[category]("get", id);
+};
+
 const getAllTopics = (category: TicketCategory): Topics => {
   return topicsDb[category]("getAll").map((entry) => ({
     ...entry.value,
@@ -34,6 +38,8 @@ export default {
   getTicketById,
   getRandomTicket,
   getAllTickets,
-
+  getTopicById,
   getAllTopics,
 };
+
+export type { Ticket, TicketCategory, Tikets, Topic, Topics };

@@ -1,4 +1,3 @@
-// Импорт middleware для аутентификации
 import authMiddleware from '@renderer/middlewares/auth'
 
 import { createMemoryHistory, createRouter } from 'vue-router'
@@ -12,7 +11,7 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@renderer/layouts/HomeLayout.vue'),
-      meta: { isAuth: true, middleware: [authMiddleware] },
+      meta: { isAuth: true, middleware: [authMiddleware], title: 'Главная' },
       children: [
         {
           path: '',
@@ -20,6 +19,9 @@ const router = createRouter({
         },
         {
           path: 'teory',
+          meta: {
+            title: 'Теория'
+          },
           children: [
             {
               path: '',
@@ -27,14 +29,42 @@ const router = createRouter({
             },
             {
               path: 'penalties',
+              meta: {
+                title: 'Штрафы'
+              },
               component: () => import('@renderer/pages/teory/penalties.vue')
             },
             {
               path: 'questions',
-              component: () => import('@renderer/pages/teory/questions.vue')
+              meta: {
+                title: 'Экаменационные вопросы'
+              },
+              children: [
+                {
+                  path: '',
+                  component: () => import('@renderer/pages/teory/questions/index.vue')
+                },
+                {
+                  path: 'tickets/:ticket_id',
+                  meta: {
+                    title: 'Экзаменационный билет'
+                  },
+                  component: () => import('@renderer/pages/teory/questions/[ticket_id].vue')
+                },
+                {
+                  path: 'topics/:topic_id',
+                  meta: {
+                    title: 'Раздел'
+                  },
+                  component: () => import('@renderer/pages/teory/questions/[topic_id].vue')
+                }
+              ]
             },
             {
               path: 'signs',
+              meta: {
+                title: 'Дорожные знаки'
+              },
               component: () => import('@renderer/pages/teory/signs.vue')
             }
           ]

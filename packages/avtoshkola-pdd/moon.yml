@@ -9,6 +9,7 @@ language: "typescript"
 
 fileGroups:
   configs:
+    - "package.json"
     - "esbuild.config.js"
     - "tsconfig.json"
   sources:

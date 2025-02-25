@@ -28,6 +28,7 @@ async function buildPackage() {
 
   console.log("📂 Copying static files...");
   await copy("src/data", "dist/data");
+  await copy("src/images", "dist/images");
 
   console.log("✅ Build complete!");
 }
