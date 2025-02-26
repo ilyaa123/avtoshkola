@@ -4,5 +4,6 @@
     style="min-height: 100dvh"
   >
     <router-view />
+    <div id="modals"></div>
   </div>
 </template>

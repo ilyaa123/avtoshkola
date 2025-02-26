@@ -4,10 +4,14 @@ import { electronAPI } from '@electron-toolkit/preload'
 
 import auth from './api/auth'
 import questions from './api/questions'
+import penalties from './api/penalties'
+import signs from './api/signs'
 
 const api = {
   auth,
-  questions
+  questions,
+  penalties,
+  signs
 }
 
 if (process.contextIsolated) {

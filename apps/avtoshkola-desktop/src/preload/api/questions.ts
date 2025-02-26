@@ -6,7 +6,7 @@ import { questions } from 'avtoshkola-pdd'
 import type { TicketCategory } from 'avtoshkola-pdd'
 
 type SelectedAnswer = {
-  question: string
+  question_id: string
   answer: number
   is_correct: boolean
   answer_tip: string
@@ -78,7 +78,7 @@ const getTicketAnswers = async (ticket_id: string): Promise<{ data: SelectedAnsw
       const data = fs.readFileSync(ticketAnswersFilePath, 'utf-8')
       const ticketAnswers = JSON.parse(data)
 
-      const ticket = ticketAnswers.find((item: any) => item.ticket_id === ticket_id)
+      const ticket = ticketAnswers.find((item) => item.ticket_id === ticket_id)
       if (ticket) {
         return { data: ticket.answers }
       }
@@ -91,7 +91,7 @@ const getTicketAnswers = async (ticket_id: string): Promise<{ data: SelectedAnsw
 }
 
 const getAllTicketAnswersCount = async (): Promise<
-  { ticket_id: string; is_correct_count: number }[]
+  { ticket_id: string; count: number; is_correct_count: number }[]
 > => {
   try {
     const ticketAnswersFilePath = await getTicketAnswersFilePath()
@@ -100,11 +100,15 @@ const getAllTicketAnswersCount = async (): Promise<
       const data = fs.readFileSync(ticketAnswersFilePath, 'utf-8')
       const ticketAnswers = JSON.parse(data)
 
-      return ticketAnswers.map((item: any) => {
+      return ticketAnswers.map((item) => {
         const correctCount = item.answers.filter(
           (answer: SelectedAnswer) => answer.is_correct
         ).length
-        return { ticket_id: item.ticket_id, is_correct_count: correctCount }
+        return {
+          ticket_id: item.ticket_id,
+          count: item.answers.length,
+          is_correct_count: correctCount
+        }
       })
     }
     return []
@@ -133,7 +137,7 @@ const saveTopicAnswers = async (
       topicAnswers = JSON.parse(existingData)
     }
 
-    const existingTopic = topicAnswers.find((item: any) => item.topic_id === topic_id)
+    const existingTopic = topicAnswers.find((item) => item.topic_id === topic_id)
     if (existingTopic) {
       existingTopic.answers = answers
     } else {
@@ -156,7 +160,7 @@ const getTopicAnswers = async (topic_id: string): Promise<{ data: SelectedAnswer
       const data = fs.readFileSync(topicAnswersFilePath, 'utf-8')
       const topicAnswers = JSON.parse(data)
 
-      const topic = topicAnswers.find((item: any) => item.topic_id === topic_id)
+      const topic = topicAnswers.find((item) => item.topic_id === topic_id)
       if (topic) {
         return { data: topic.answers }
       }
@@ -169,7 +173,7 @@ const getTopicAnswers = async (topic_id: string): Promise<{ data: SelectedAnswer
 }
 
 const getAllTopicAnswersCount = async (): Promise<
-  { topic_id: string; is_correct_count: number }[]
+  { topic_id: string; count: number; is_correct_count: number }[]
 > => {
   try {
     const topicAnswersFilePath = await getTopicAnswersFilePath()
@@ -178,11 +182,15 @@ const getAllTopicAnswersCount = async (): Promise<
       const data = fs.readFileSync(topicAnswersFilePath, 'utf-8')
       const topicAnswers = JSON.parse(data)
 
-      return topicAnswers.map((item: any) => {
+      return topicAnswers.map((item) => {
         const correctCount = item.answers.filter(
           (answer: SelectedAnswer) => answer.is_correct
         ).length
-        return { topic_id: item.topic_id, is_correct_count: correctCount }
+        return {
+          topic_id: item.topic_id,
+          count: item.answers.length,
+          is_correct_count: correctCount
+        }
       })
     }
     return []

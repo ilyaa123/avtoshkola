@@ -1,11 +1,13 @@
 export type TicketCategory = "A_B" | "C_D";
 
 export type Answer = {
+  id: string;
   answer_text: string;
   is_correct: boolean;
 };
 
 export type Question = {
+  id: string;
   title: string;
   image: string;
   question: string;

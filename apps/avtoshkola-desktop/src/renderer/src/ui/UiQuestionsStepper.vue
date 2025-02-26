@@ -6,11 +6,13 @@ import UiButton from './UiButton.vue'
 import transformImagePath from '@renderer/utils/transformImagePath'
 
 type Answer = {
+  id: string
   answer_text: string
   is_correct: boolean
 }
 
 type Question = {
+  id: string
   title: string
   image: string
   question: string
@@ -20,7 +22,7 @@ type Question = {
 }
 
 type SelectedAnswer = {
-  question: string
+  question_id: string
   answer: number
   is_correct: boolean
   answer_tip: string
@@ -45,20 +47,20 @@ const selectedAnswer = ref<SelectedAnswer | null>(null)
 const currentQuestion = computed(() => props.questions[pointer.value])
 
 const isDisabled = computed(
-  () => !!answers.value.find((item) => item.question == selectedAnswer.value?.question)
+  () => !!answers.value.find((item) => item.question_id == selectedAnswer.value?.question_id)
 )
 
-const handleOnSetPointer = (newPointer: number, question?: string) => {
+const handleOnSetPointer = (newPointer: number, question_id?: string) => {
   if (newPointer >= answers.value.length + 1) return
-  const findedAnswer = answers.value.find((item) => item.question == question)
+  const findedAnswer = answers.value.find((item) => item.question_id == question_id)
   pointer.value = newPointer
   selectedAnswer.value = findedAnswer || null
 }
 
 const handleOnSetAnswer = (answer: number, is_correct: boolean) => {
-  if (isDisabled.value) return
+  if (isDisabled.value || selectedAnswer.value) return
   selectedAnswer.value = {
-    question: currentQuestion.value.question,
+    question_id: currentQuestion.value.id,
     answer,
     is_correct,
     answer_tip: currentQuestion.value.answer_tip
@@ -84,14 +86,14 @@ const handleOnGoNextQuestion = () => {
         :class="{
           'bg-blue-600 text-white': index === pointer,
           'bg-green-500 text-white cursor-pointer':
-            !!answers.find((item) => item.question == question.question)?.is_correct &&
+            !!answers.find((item) => item.question_id == question.id)?.is_correct &&
             index !== pointer,
           'bg-red-500 text-white cursor-pointer':
-            !!answers.find((item) => item.question == question.question) &&
-            !answers.find((item) => item.question == question.question)?.is_correct &&
+            !!answers.find((item) => item.question_id == question.id) &&
+            !answers.find((item) => item.question_id == question.id)?.is_correct &&
             index !== pointer
         }"
-        @click="handleOnSetPointer(index, question.question)"
+        @click="handleOnSetPointer(index, question.id)"
       >
         {{ index + 1 }}
       </div>

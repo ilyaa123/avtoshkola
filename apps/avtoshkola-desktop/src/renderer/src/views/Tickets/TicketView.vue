@@ -20,6 +20,8 @@ const { user } = useAuth()
 
 const ticket = ref<Ticket | null>(null)
 
+const savedAnswers = ref<SelectedAnswer[]>([])
+
 const selectedAnswers = ref<SelectedAnswer[]>([])
 
 const getTicket = async () => {
@@ -27,13 +29,21 @@ const getTicket = async () => {
   ticket.value = findedTicket
 }
 
+const getSavedAnswers = async () => {
+  const findedAnswers = await window.api.questions.getTicketAnswers(props.ticketId)
+  savedAnswers.value = findedAnswers.data
+}
+
 onMounted(() => {
   getTicket()
+  getSavedAnswers()
 })
 
 onBeforeUnmount(() => {
   try {
-    window.api.questions.saveTicketAnswers(props.ticketId, deepClone(selectedAnswers.value))
+    if (selectedAnswers.value.length > savedAnswers.value.length) {
+      window.api.questions.saveTicketAnswers(props.ticketId, deepClone(selectedAnswers.value))
+    }
   } catch (error) {
     console.log('🚀 ~ onBeforeUnmount ~ error:', error)
   }
