@@ -2,6 +2,8 @@
   "name": "avtoshkola-monorepo",
   "version": "1.0.0",
   "private": true,
+  "description": "avtoshkola monorepo",
+  "homepage": "https://avtoshkola-monorepo",
   "workspaces": [
     "packages/*",
     "apps/*"

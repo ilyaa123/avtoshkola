@@ -2,13 +2,14 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 import UiQuestionsStepper from '@renderer/ui/UiQuestionsStepper.vue'
+import UiButton from '@renderer/ui/UiButton.vue'
 
 import { useAuth } from '@renderer/store/auth'
 
 import deepClone from '@renderer/utils/deepClone'
 
-import type { Topic } from 'avtoshkola-pdd'
 import type { SelectedAnswer } from '@renderer/types/answers'
+import type { Topic } from '@renderer/types/entities'
 
 interface Props {
   topicId: string
@@ -39,6 +40,18 @@ const getSavedAnswers = async () => {
   pointer.value = findedAnswers.data.length
 }
 
+const handleOnReset = async () => {
+  try {
+    await window.api.questions.saveTopicAnswers(props.topicId, [])
+    await getSavedAnswers()
+  } catch (error) {
+    console.log('🚀 ~ handleOnReset ~ error:', error)
+  } finally {
+    selectedAnswers.value = []
+    pointer.value = 0
+  }
+}
+
 onMounted(() => {
   getTopic()
   getSavedAnswers()
@@ -63,9 +76,19 @@ onBeforeUnmount(() => {
         :questions="topic.questions"
       >
         <template #prepend>
-          <h3 class="text-center text-white font-semibold text-lg mb-2">
+          <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">
             {{ topic?.topic_name }}
           </h3>
+        </template>
+        <template #finish>
+          <div class="text-gray-900 dark:text-white text-center py-4">
+            <p class="text-lg mb-2">Результат:</p>
+            <p class="text-xl mb-4">
+              {{ selectedAnswers.filter((item) => !!item.is_correct).length }} /
+              {{ topic.questions.length }}
+            </p>
+            <ui-button @click="handleOnReset">Попробовать снова</ui-button>
+          </div>
         </template>
       </ui-questions-stepper>
     </template>

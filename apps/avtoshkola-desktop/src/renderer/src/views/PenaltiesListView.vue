@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 
 import UiTable from '@renderer/ui/UiTable.vue'
 
-import type { Penalty } from 'avtoshkola-pdd'
+import type { Penalty } from '@renderer/types/entities'
 
 const headers = [
   {
@@ -24,7 +24,6 @@ const penalties = ref<Penalty[]>([])
 
 const getAllPenalties = async () => {
   const allPenalties = await window.api.penalties.getAllPenalties()
-  console.log('🚀 ~ getAllPenalties ~ allPenalties:', allPenalties)
 
   penalties.value = allPenalties
 }

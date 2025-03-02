@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 
 import UiExpansionPanels from '@renderer/ui/UiExpansionPanels.vue'
 
-import type { SignTypes } from 'avtoshkola-pdd'
+import type { SignTypes } from '@renderer/types/entities'
 
 const singTypesList = ref<SignTypes>([])
 

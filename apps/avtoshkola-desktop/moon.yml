@@ -7,28 +7,75 @@ project:
 type: 'application'
 language: 'typescript'
 
+fileGroups:
+  configs:
+    - 'electron-builder.yml'
+    - 'electron.vite.config.ts'
+    - 'postcss.config.js'
+    - 'tailwind.config.ts'
+    - 'tsconfig.json'
+    - 'tsconfig.node.json'
+    - 'tsconfig.web.json'
+    - 'package.json'
+  sources:
+    - 'src/**/*'
+    - 'resources/**'
+  outputs-linux:
+    - 'dist/linux-unpacked'
+    - 'dist/*.deb'
+    - 'dist/*.snap'
+    - 'dist/*.AppImage'
+    - 'dist/*.yml'
+    - 'dist/*.yaml'
+  outputs-win:
+    - 'dist/win-unpacked'
+    - 'dist/*.exe'
+    - 'dist/*.blockmap'
+    - 'dist/*.yml'
+    - 'dist/*.yaml'
+
 dependsOn:
   - 'avtoshkola-pdd'
 
 tasks:
+  build-linux:
+    deps:
+      - '^:build'
+      - 'build-renderer'
+      - 'builder-linux'
+
   build-win:
-    command: 'yarn build && electron-builder --win'
+    deps:
+      - '^:build'
+      - 'build-renderer'
+      - 'builder-win'
+
+  build-renderer:
+    command: 'electron-vite build'
+    inputs:
+      - '@group(configs)'
+      - 'src/renderer/**/*'
+    outputs:
+      - 'out'
+
+  builder-linux:
+    command: 'electron-builder --linux'
+    inputs:
+      - '@group(configs)'
+      - '@group(sources)'
+    outputs:
+      - '@group(outputs-linux)'
+
+  builder-win:
+    command: 'electron-builder --win'
     deps:
       - '^:build'
     inputs:
-      - 'src/**/*'
-      - 'resources/**'
-      - 'electron-builder.yml'
-      - 'electron.vite.config.ts'
-      - 'postcss.config.js'
-      - 'tailwind.config.ts'
-      - 'tsconfig.json'
-      - 'tsconfig.node.json'
-      - 'tsconfig.web.json'
+      - '@group(configs)'
+      - '@group(sources)'
     outputs:
-      - '.out'
-      - 'dist'
-      - 'build'
+      - '@group(outputs-win)'
+
   dev:
     command: 'electron-vite dev'
     preset: 'server'

@@ -41,6 +41,9 @@ function createWindow(): void {
 ipcMain.handle('get-app-path', () => {
   return app.getAppPath()
 })
+ipcMain.handle('get-app-data-path', () => {
+  return app.getPath('userData')
+})
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')

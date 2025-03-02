@@ -3,30 +3,16 @@
   "version": "1.0.0",
   "description": "Описание: Репозиторий содержит экзаменационные вопросы для получения водительского удостоверения в РФ, доп.материалы по дорожным знакам, а так же краткую информацию по штрафам за правонарушения. Вопросы сгруппированы по билетам от 1 до 40, раздел ПДД, а так же по разделам правил. Стоит учесть, что не все вопросы из разделов могут встретиться в билетах. Ещё одним нюансом является то, что один и тот же вопрос может встречаться в разных разделах / разных категориях.",
   "private": "true",
+  "homepage": "https://avtoshkola-pdd",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    },
+    ".": "./dist/data/",
     "./images/": "./dist/images/"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc && node esbuild.config.js",
-    "dev": "tsc --watch"
-  },
-  "dependencies": {
-    "file-system-db": "^2.1.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.1",
-    "esbuild": "^0.24.2",
-    "typescript": "^5.7.3"
+    "build": "node build.js"
   }
 }

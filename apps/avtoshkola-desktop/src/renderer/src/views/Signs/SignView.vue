@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 
 import transformImagePath from '@renderer/utils/transformImagePath'
 
-import type { Sign } from 'avtoshkola-pdd'
+import type { Sign } from '@renderer/types/entities'
 
 interface Props {
   type: string
@@ -26,7 +26,11 @@ onMounted(() => {
 <template>
   <div v-if="sign" class="flex flex-col items-center text-center gap-4">
     <h4 class="font-semibold">{{ sign.number }} {{ sign.title }}</h4>
-    <img :src="transformImagePath(sign.image)" style="max-width: 320px; width: 100%" alt="Sign" />
+    <img
+      :src="transformImagePath(sign.image.replace('./images/', '/pdd/'))"
+      style="max-width: 320px; width: 100%"
+      alt="Sign"
+    />
     <p class="px-2" style="max-height: 220px; overflow-y: auto">{{ sign.description }}</p>
   </div>
 </template>

@@ -5,7 +5,7 @@ import TicketCard from '@renderer/components/TicketCard.vue'
 
 import { useAuth } from '@renderer/store/auth'
 
-import type { Tikets } from 'avtoshkola-pdd'
+import type { Tikets } from '@renderer/types/entities'
 
 const { user } = useAuth()
 

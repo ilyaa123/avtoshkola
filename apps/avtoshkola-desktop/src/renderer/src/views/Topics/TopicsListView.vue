@@ -5,7 +5,7 @@ import TopicCard from '@renderer/components/TopicCard.vue'
 
 import { useAuth } from '@renderer/store/auth'
 
-import type { Topics } from 'avtoshkola-pdd'
+import type { Topics } from '@renderer/types/entities'
 
 const { user } = useAuth()
 
@@ -40,6 +40,7 @@ onMounted(() => {
         :topic-name="topic.topic_name"
         :questions-length="topic.questions.length"
         :saved-correct-count="savedTopics.find((item) => item.topic_id == topic.id)?.count || 0"
+        class="w-full md:w-auto"
       />
     </div>
   </section>

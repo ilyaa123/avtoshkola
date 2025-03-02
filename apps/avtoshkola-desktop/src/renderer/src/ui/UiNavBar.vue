@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 
+import transformImagePath from '@renderer/utils/transformImagePath'
+
 interface Props {
   title?: string
   avatar?: string
@@ -47,7 +49,12 @@ onUnmounted(() => {
           data-dropdown-placement="bottom"
           @click.stop="menuOpen = !menuOpen"
         >
-          <img v-if="!!avatar" :src="avatar" class="w-8 h-8 rounded-full" alt="user avatar" />
+          <img
+            v-if="!!avatar"
+            :src="transformImagePath(avatar)"
+            class="w-8 h-8 rounded-full"
+            alt="user avatar"
+          />
         </button>
         <div
           id="user-dropdown"

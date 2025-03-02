@@ -3,6 +3,7 @@
   "include": ["electron.vite.config.*", "tailwind.config.ts", "src/main/**/*", "src/preload/**/*"],
   "compilerOptions": {
     "composite": true,
+    "noImplicitAny": false,
     "types": ["electron-vite/node"]
   }
 }

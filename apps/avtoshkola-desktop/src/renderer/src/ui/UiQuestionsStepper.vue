@@ -76,7 +76,7 @@ const handleOnGoNextQuestion = () => {
 }
 </script>
 <template>
-  <div class="p-4 text-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800">
+  <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
     <slot name="prepend" />
     <div class="grid grid-cols-12 mb-6">
       <div
@@ -98,18 +98,22 @@ const handleOnGoNextQuestion = () => {
         {{ index + 1 }}
       </div>
     </div>
-    <div class="mx-auto" style="max-width: 800px">
+    <div v-if="currentQuestion" class="mx-auto" style="max-width: 800px">
       <div class="flex items-center justify-center mb-4">
-        <img :src="transformImagePath(currentQuestion.image)" width="100%" alt="Dynamic Image" />
+        <img
+          :src="transformImagePath(currentQuestion.image.replace('./images/', '/pdd/'))"
+          width="100%"
+          alt="Dynamic Image"
+        />
       </div>
       <div>
-        <p class="text-white mb-2">{{ currentQuestion.question }}</p>
+        <p class="text-gray-900 dark:text-white mb-2">{{ currentQuestion.question }}</p>
         <div class="flex flex-col items-center gap-2">
           <button
             v-for="(answer, i) in currentQuestion.answers"
             :key="answer.answer_text"
             block
-            class="font-semibold px-5 py-2.5 me-2 text-white w-full text-left"
+            class="font-semibold px-5 py-2.5 me-2 text-gray-900 dark:text-white w-full text-left"
             :class="{
               'hover:bg-gray-200 dark:hover:bg-gray-700': !selectedAnswer,
               'bg-red-600': selectedAnswer?.answer == i && !selectedAnswer?.is_correct,
@@ -122,12 +126,17 @@ const handleOnGoNextQuestion = () => {
         </div>
 
         <template v-if="!!selectedAnswer">
-          <p class="px-5 py-2.5 me-2 mt-4 border border-white text-white rounded-lg">
+          <p
+            class="px-5 py-2.5 me-2 mt-4 border dark:border-white border-gray-900 text-gray-900 dark:text-white rounded-lg"
+          >
             {{ selectedAnswer.answer_tip }}
           </p>
           <ui-button class="mt-4" block @click="handleOnGoNextQuestion">Дальше</ui-button>
         </template>
       </div>
+    </div>
+    <div v-else>
+      <slot name="finish" />
     </div>
   </div>
 </template>

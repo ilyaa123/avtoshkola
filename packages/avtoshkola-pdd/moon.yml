@@ -10,26 +10,12 @@ language: "typescript"
 fileGroups:
   configs:
     - "package.json"
-    - "esbuild.config.js"
-    - "tsconfig.json"
   sources:
     - "src/**/*"
 
 tasks:
   build:
-    deps:
-      - tsc
-      - esbuild
-    outputs:
-      - "dist"
-
-  tsc:
-    command: "tsc"
-    outputs:
-      - "dist"
-
-  esbuild:
-    command: "node esbuild.config.js"
+    command: "node build.js"
     inputs:
       - "@group(configs)"
       - "@group(sources)"

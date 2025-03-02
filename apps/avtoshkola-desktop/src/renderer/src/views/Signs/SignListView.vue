@@ -5,7 +5,7 @@ import UiCard from '@renderer/ui/UiCard.vue'
 
 import transformImagePath from '@renderer/utils/transformImagePath'
 
-import type { Sign } from 'avtoshkola-pdd'
+import type { Sign } from '@renderer/types/entities'
 
 interface Props {
   type: string
@@ -39,7 +39,11 @@ onMounted(() => {
         @click="emits('click:sign', sign.number)"
       >
         <div class="w-full h-full flex flex-col items-center justify-start gap-2 text-center">
-          <img :src="transformImagePath(sign.image)" style="max-height: 100px" alt="Sign" />
+          <img
+            :src="transformImagePath(sign.image.replace('./images/', '/pdd/'))"
+            style="max-height: 100px"
+            alt="Sign"
+          />
           {{ sign.number }} {{ sign.title }}
         </div>
       </ui-card>
