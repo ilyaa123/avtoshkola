@@ -2,17 +2,24 @@
 interface Props {
   block?: boolean
   type?: HTMLButtonElement['type']
+  disabled?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
-  type: 'button'
+  type: 'button',
+  disabled: false
 })
 </script>
+
 <template>
   <button
     :type="type"
-    :class="`${block ? 'w-full' : ''}`"
-    class="font-medium rounded-lg text-sm px-5 py-2.5 me-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+    :disabled="disabled"
+    :class="[
+      block ? 'w-full' : '',
+      'font-medium rounded-lg text-sm px-5 py-2.5 me-2 text-white',
+      disabled ? 'bg-gray-400' : 'bg-blue-700 hover:bg-blue-800 dark:bg-blue-600  '
+    ]"
   >
     <slot />
   </button>

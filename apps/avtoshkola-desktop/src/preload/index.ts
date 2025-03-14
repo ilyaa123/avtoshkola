@@ -6,12 +6,14 @@ import auth from './api/auth'
 import questions from './api/questions'
 import penalties from './api/penalties'
 import signs from './api/signs'
+import practices from './api/practices'
 
 const api = {
   auth,
   questions,
   penalties,
-  signs
+  signs,
+  practices
 }
 
 if (process.contextIsolated) {

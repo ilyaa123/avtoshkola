@@ -5,7 +5,7 @@ import UiNavBar from '@renderer/ui/UiNavBar.vue'
 import UiSidebar from '@renderer/ui/UiSidebar.vue'
 import UiBreadcrumbs from '@renderer/ui/UiBreadcrumbs.vue'
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@renderer/store/auth'
 
 const menu = [
@@ -19,9 +19,10 @@ const menu = [
   }
 ]
 
-const route = useRoute()
+const route = useRoute(),
+  router = useRouter()
 
-const { user } = useAuth()
+const { user, setUser } = useAuth()
 
 const sidebarIsOpen = ref(false)
 
@@ -39,6 +40,11 @@ const breadcrumbs = computed(() => {
 
   return breadcrumbList
 })
+
+const handleOnLogout = () => {
+  setUser(null)
+  router.push('/login')
+}
 
 watch(
   () => route.fullPath,
@@ -64,6 +70,7 @@ watch(
         :login="user?.login"
         :name="user?.name"
         @toggle-sidebar="sidebarIsOpen = !sidebarIsOpen"
+        @logout="handleOnLogout"
       />
       <div class="m-2 pt-2">
         <transition name="fade-slide" mode="out-in">

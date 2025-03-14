@@ -10,7 +10,7 @@ interface Props {
   name?: string
 }
 
-const emits = defineEmits(['toggle-sidebar'])
+const emits = defineEmits(['toggle-sidebar', 'logout'])
 
 defineProps<Props>()
 
@@ -67,11 +67,12 @@ onUnmounted(() => {
           </div>
           <ul class="py-2" aria-labelledby="user-menu-button">
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >Выход</a
+              <button
+                class="block px-4 py-2 text-sm text-left w-full text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                @click="emits('logout')"
               >
+                Выход
+              </button>
             </li>
           </ul>
         </div>

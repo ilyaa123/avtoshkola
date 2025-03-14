@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { watch } from 'vue'
+
+interface Props {
+  closable?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  closable: true
+})
+
 const isOpen = defineModel<boolean>({
   default: false
 })
@@ -32,6 +41,7 @@ watch(isOpen, (newValue) => {
       >
         <div class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800 max-w-2xl w-full p-6">
           <button
+            v-if="closable"
             class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:hover:text-gray-300"
             @click="closeModal"
           >

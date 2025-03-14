@@ -4,11 +4,15 @@ import {
   getAllTopicAnswersCount,
   getAllTopics,
   getTicketAnswers,
+  getSolvedTicketsCount,
+  getAverageMaxTicketsScore,
+  getLastSolvedTicket,
   getTicketById,
   getTopicAnswers,
   getTopicById,
   saveTicketAnswers,
-  saveTopicAnswers
+  saveTopicAnswers,
+  getTopicsTotals
 } from './methods'
 
 export default {
@@ -17,9 +21,13 @@ export default {
   getTopic: getTopicById,
   getAllTopics,
   saveTicketAnswers,
+  getSolvedTicketsCount,
+  getAverageMaxTicketsScore,
+  getLastSolvedTicket,
   getTicketAnswers,
   getAllTicketAnswersCount,
   saveTopicAnswers,
   getTopicAnswers,
-  getAllTopicAnswersCount
+  getAllTopicAnswersCount,
+  getTopicsTotals
 }

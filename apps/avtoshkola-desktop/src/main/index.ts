@@ -3,7 +3,8 @@ import { join } from 'path'
 
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 
-import icon from '../../resources/icon.png?asset'
+import iconLinux from '../../resources/icon.png?asset'
+import iconWin from '../../resources/icon.ico?asset'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -11,7 +12,8 @@ function createWindow(): void {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    icon:
+      process.platform === 'win32' ? iconWin : process.platform === 'linux' ? iconLinux : undefined,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false

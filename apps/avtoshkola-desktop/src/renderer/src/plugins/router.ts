@@ -71,6 +71,9 @@ const router = createRouter({
         },
         {
           path: 'practic',
+          meta: {
+            title: 'Практика'
+          },
           component: () => import('@renderer/pages/practic.vue')
         }
       ]
