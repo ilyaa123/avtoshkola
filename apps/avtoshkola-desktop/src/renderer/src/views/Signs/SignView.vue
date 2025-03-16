@@ -16,7 +16,7 @@ const sign = ref<Sign | null>(null)
 
 const getSign = async () => {
   const findedSign = await window.api.signs.getSign(props.type, props.number)
-  sign.value = findedSign
+  sign.value = findedSign || null
 }
 
 onMounted(() => {
