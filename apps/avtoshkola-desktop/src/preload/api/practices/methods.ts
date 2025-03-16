@@ -1,4 +1,4 @@
-import { dbPromise } from './db'
+import { dbPromise } from '../../db'
 import type { Practic } from './types'
 
 const formatDecimal = (num: number) => String(num).replace('.', '_')

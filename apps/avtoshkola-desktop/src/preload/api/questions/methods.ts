@@ -1,5 +1,5 @@
 import { getTicketsDb, getTopicsDb } from './utils'
-import { dbPromise } from './db'
+import { dbPromise } from '../../db'
 
 import type {
   Ticket,

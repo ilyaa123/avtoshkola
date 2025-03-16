@@ -1,6 +1,6 @@
 import type { Penalty } from './types'
 
-import { dbPromise } from './db'
+import { dbPromise } from '../../db'
 
 export const getAllPenalties = async (): Promise<Penalty[]> => {
   const penaltiesDb = (await dbPromise).penaltiesDb

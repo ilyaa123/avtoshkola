@@ -59,9 +59,14 @@ watch(
     <ui-sidebar
       class="flex-grow"
       title="ДрайвСтарт"
+      img="/icon.png"
+      :avatar="user?.avatar"
+      :login="user?.login"
+      :name="user?.name"
       :menu="menu"
       :is-open="sidebarIsOpen"
       @close-sidebar="sidebarIsOpen = false"
+      @logout="handleOnLogout"
     />
     <div class="w-full">
       <ui-nav-bar

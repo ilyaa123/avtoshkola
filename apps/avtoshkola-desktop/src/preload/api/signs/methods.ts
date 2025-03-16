@@ -1,6 +1,6 @@
 import type { SignTypes, Sign } from './types'
 
-import { dbPromise } from './db'
+import { dbPromise } from '../../db'
 
 export const getSygnTypes = async (): Promise<SignTypes> => {
   const signsDb = (await dbPromise).signsDb
@@ -13,7 +13,7 @@ export const getSigns = async (type: string): Promise<Sign[]> => {
   return signsDb.get(type)
 }
 
-export const getSign = async (type: string, number: string): Promise<Sign> => {
+export const getSign = async (type: string, number: string): Promise<Sign | undefined> => {
   const signsDb = (await dbPromise).signsDb
   const typeData = signsDb.get(type)
   return typeData ? typeData[number] : undefined

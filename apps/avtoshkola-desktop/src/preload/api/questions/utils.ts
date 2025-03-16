@@ -1,6 +1,6 @@
 import { FSDB } from 'file-system-db'
 import { TicketCategory } from './types'
-import { dbPromise } from './db'
+import { dbPromise } from '../../db'
 
 type FSDBMethodsOnly = {
   [K in keyof FSDB]: FSDB[K] extends (...args: any[]) => any ? K : never
